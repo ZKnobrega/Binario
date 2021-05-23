@@ -1,6 +1,12 @@
 #include <iostream>
-#include <Locale>
+#include <locale>
 using namespace std;
+
+void convDecParaBin(int num, int* bin);
+void imprimeBin(int bin[]);
+void copiaBin(int binOriginal[], int* binCopia);
+void somaBin(int bin1[], int bin2[], int* soma);
+void complementoA2(int* bin);
 
 int main()
 {
@@ -11,55 +17,62 @@ int main()
 	cin >> num1;
 	cout << "Insira o segundo número: ";
 	cin >> num2;
-
-	for (int i = 0; i < 8; i++)
-	{
-		if (num1 >= 1)
-		{
-			bin1[i] = (num1 % 2);
-			num1 /= 2;
-		}
-
-		else
-		{
-			bin1[i] = 0;
-		}
-
-		if (num2 >= 1)
-		{
-			bin2[i] = (num2 % 2);
-			num2 /= 2;
-		}
-
-		else
-		{
-			bin2[i] = 0;
-		}
-	}
-
+	convDecParaBin(num1, bin1);
+	convDecParaBin(num2, bin2);
 	cout << "\nPrimeiro número em binário: ";
-
-	for (int i = 7; i >= 0; i--)
-	{
-		cout << bin1[i];
-	}
+	imprimeBin(bin1);
     cout << "\nSegundo número em binário: ";
-
-	for (int i = 7; i >= 0; i--)
-	{
-		cout << bin2[i];
-	}
-
-	for (int i=7; i>=0; i--)
-    {
-        Bin2[i]= bin2[i];
-    }
-
+	imprimeBin(bin2);
+	copiaBin(bin1, Bin1);
+	copiaBin(bin2, Bin2);
+	somaBin(bin1, bin2, soma);
+	cout << "\nSoma entre os binários =  ";
+	imprimeBin(soma);
+	cout << "\n\nAplicando o complemento a 2 em: ";
+	imprimeBin(Bin2);
+	complementoA2(Bin2);
+	cout << "\nTorna-se: ";
+	imprimeBin(bin2);
+	somaBin(Bin1, bin2, compleA2);
+	cout << "\nSoma com complemento A2 =  ";
+	imprimeBin(compleA2);
+	return 0;
+}
+//Converte números decimais para números binários e guarda em um vetor.
+void convDecParaBin(int num, int* bin)
+{
 	for (int i = 0; i < 8; i++)
 	{
-		Bin1[i] = bin1[i];
+		if (num >= 1)
+		{
+			bin[i] = (num % 2);
+			num /= 2;
+		}
+		else
+		{
+			bin[i] = 0;
+		}
 	}
-
+}
+//Imprime o vetor com o número binário.
+void imprimeBin(int bin[])
+{
+	for (int i = 7; i >= 0; i--)
+	{
+		cout << bin[i];
+	}
+}
+//Copia os inteiros do vetor "binOriginal" para "binCopia"
+void copiaBin(int binOriginal[], int* binCopia)
+{
+	for (int i = 0; i < 8; i++)
+	{
+		binCopia[i] = binOriginal[i];
+	}
+}
+//Soma dois números binários e guarda no vetor "soma"
+void somaBin(int bin1[], int bin2[], int* soma)
+{
 	for (int i = 0; i < 8; i++)
 	{
 		soma[i] = bin1[i] + bin2[i];
@@ -76,78 +89,22 @@ int main()
 			bin1[i + 1] += 1;
 		}
 	}
-	cout << "\nSoma entre os binários =  ";
-
-	for (int i = 7; i >= 0; i--)
-	{
-		cout << soma[i];
-	}
-
-	cout << "\n\nAplicando o complemento a 2 em: ";
-
-	for (int i=7; i>=0; i--)
-	{
-		cout << Bin2[i];
-	}
+}
+//Realiza a operação de complemento a 2
+void complementoA2(int* bin)
+{
+	int bit_1[8] = {1,0,0,0,0,0,0,0}; //bit 1 para utilizar a função somaBin() com o vetor "bin"
 
 	for (int i = 0; i < 8; i++)
 	{
-		if (bin2[i] == 1)
+		if (bin[i] == 1)
 		{
-			bin2[i] = 0;
+			bin[i] = 0;
 		}
 		else
 		{
-			bin2[i] = 1;
+			bin[i] = 1;
 		}
 	}
-
-	bin2[0] += 1;
-
-	for (int i = 0; i < 8; i++)
-	{
-		if (bin2[i] == 2)
-		{
-			bin2[i] = 0;
-			bin2[i + 1] += 1;
-		}
-
-		if (bin2[i] == 3)
-		{
-			bin2[i] = 1;
-			bin2[i + 1] += 1;
-		}
-	}
-
-	cout << "\nTorna-se: ";
-
-	for (int i = 7; i >= 0; i--)
-	{
-		cout << bin2[i];
-	}
-
-
-	for (int i = 0; i < 8; i++)
-	{
-		compleA2[i] = Bin1[i] + bin2[i];
-
-		if (compleA2[i] == 2)
-		{
-			compleA2[i] = 0;
-			Bin1[i + 1] += 1;
-		}
-
-		if (compleA2[i] == 3)
-		{
-			compleA2[i] = 1;
-			Bin1[i + 1] += 1;
-		}
-	}
-	cout << "\nSoma com complemento A2 =  ";
-
-	for (int i = 7; i >= 0; i--)
-	{
-		cout << compleA2[i];
-	}
-	return 0;
+	somaBin(bin, bit_1, bin);
 }
